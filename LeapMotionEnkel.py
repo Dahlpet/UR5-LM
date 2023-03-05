@@ -39,7 +39,7 @@ class SampleListener(Leap.Listener):
                 
                 #Convertion from Leap Motion space to UR space
                 x, y, z = (hand.palm_position[0]/500, hand.palm_position[1]/1000, hand.palm_position[2]/500)
-                rx, ry, rz = direction.pitch, (1.3*normal.roll + 2.9), direction.yaw
+                rx, ry, rz = (direction.pitch, (1.3*normal.roll + 2.9), direction.yaw)
 
                 #Limit area of freedom for UR5 arm
                 if x < -0.6: x = -0.6 
@@ -50,7 +50,7 @@ class SampleListener(Leap.Listener):
                 if y >  0.6: y = 0.6
 
                 #Set arm position
-                robot.movej(pose=[z,x,y, -0,3.14,0], a=1, v=50)
+                robot.movej(pose=[z,x,y, -0,ry,0], a=1, v=50)
                 tcp = (round(x, 3), round(y, 3), round(z, 3), round(rx, 3), round(ry, 3), round(rz, 3))
                 print("TCP position: " + str(tcp))
             
@@ -59,7 +59,8 @@ class SampleListener(Leap.Listener):
                     # Get bones
                     for b in range(0, 4):
                         bone = finger.bone(b)
-                        
+
+                #Get position, tip of thumb and tip of index finger        
                 t = hand.fingers[0].bone(bone.type).next_joint
                 i = hand.fingers[1].bone(bone.type).next_joint
 
@@ -74,7 +75,7 @@ class SampleListener(Leap.Listener):
                 dg = (d - 15) * (0 - 226) / (120 - 15) + 226
                 print("Gripper position: " + str(int(dg)))
 
-            #     #Griper
+            #     #set position of gripper
             #     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             #         s.connect((host, port))
             #         #s.sendall(b'SET ACT 1\n')   ##Activate gripper
