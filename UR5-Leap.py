@@ -3,9 +3,9 @@ import Leap, sys, URBasic, URBasic.urScript, time, socket, math, URleap
 #set speed and acceleration of the robot
 acc, vel = 0.7, 2.5
 
-host = '169.254.226.180'  #Real Robot IP
+#host = '169.254.226.180'  #Real Robot IP
 #host = '192.168.81.128'    #Simulation IP
-#host = '192.168.12.128'    #Simulation2 IP
+host = '192.168.12.128'    #Simulation2 IP
 port = 63352 #PORT used by robotiq gripper
 
 #Create a UR5 robot 
@@ -25,8 +25,8 @@ class SampleListener(Leap.Listener):
 
 
     #Control framerate from Leap Motion to the robot
-    last_print_time = 0.5
-    print_interval = 0.9 # Print once per unit time
+    last_print_time = 0
+    print_interval = 0.8 # Print once per unit time
 
     def on_frame(self, controller):
 
@@ -35,6 +35,7 @@ class SampleListener(Leap.Listener):
 
         # Get hands
         for hand in frame.hands:
+
 
             # Get the hand's normal vector and direction            
             normal = hand.palm_normal
@@ -59,8 +60,8 @@ class SampleListener(Leap.Listener):
   
 
                 #Move command to the robot, type: movej or movel
-                robot.movej(pose=[new_x,new_y,new_z, -rz,-3.14,0], a=acc, v=vel)
-                #robot.movel(pose=[new_x,new_y,new_z, rz,rx-3.14,ry], a=acc, v=vel)
+                #robot.movej(pose=[new_x,new_y,new_z, -rz,-3.14,0], a=acc, v=vel)
+                robot.movel(pose=[new_x,new_y,new_z, rz,rx-3.14,ry], a=acc, v=vel)
 
                 #Get fingers
                 for finger in hand.fingers:
