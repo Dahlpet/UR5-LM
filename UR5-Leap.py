@@ -3,30 +3,30 @@ import Leap, sys, URBasic, URBasic.urScript, time, socket, math, URleap
 #set speed and acceleration of the robot
 acc, vel = 0.7, 2.5
 
-#host = '169.254.226.180'  #Real Robot IP
+host = '169.254.226.180'  #Real Robot IP
 #host = '192.168.81.128'    #Simulation IP
-host = '192.168.12.128'    #Simulation2 IP
+#host = '192.168.12.128'    #Simulation2 IP
 port = 63352 #PORT used by robotiq gripper
 
-#UR5
+#Create a UR5 robot 
 robotModle = URBasic.robotModel.RobotModel()
 robot = URBasic.urScriptExt.UrScriptExt(host=host,robotModel=robotModle)
 robot.reset_error()
 
-#Gripper
-# with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-#     s.connect((host, port))
-#     s.sendall(b'SET ACT 1\n')
-#     s.sendall(b'SET SPE 255\n')
-#     s.sendall(b'SET FOR 0\n')
+# Activate the gripper, and set speed and force
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.connect((host, port))
+    s.sendall(b'SET ACT 1\n')
+    s.sendall(b'SET SPE 255\n')
+    s.sendall(b'SET FOR 0\n')
 
 
 class SampleListener(Leap.Listener):
 
 
-    #Control framerate from Leap Motion
+    #Control framerate from Leap Motion to the robot
     last_print_time = 0.5
-    print_interval = 0.9 # Print once per second 
+    print_interval = 0.9 # Print once per unit time
 
     def on_frame(self, controller):
 
@@ -58,9 +58,11 @@ class SampleListener(Leap.Listener):
                 rx, ry, rz = URleap.apply_bounds_wrist(rx, ry, rz)
   
 
-                #Move command to the robot
-                robot.movej(pose=[new_x,new_y,new_z, rz,rx-3.14,ry], a=acc, v=vel)
+                #Move command to the robot, type: movej or movel
+                robot.movej(pose=[new_x,new_y,new_z, -rz,-3.14,0], a=acc, v=vel)
+                #robot.movel(pose=[new_x,new_y,new_z, rz,rx-3.14,ry], a=acc, v=vel)
 
+                #Get fingers
                 for finger in hand.fingers:
 
                     # Get bones
@@ -71,7 +73,7 @@ class SampleListener(Leap.Listener):
                 t = hand.fingers[0].bone(bone.type).next_joint
                 i = hand.fingers[1].bone(bone.type).next_joint
 
-                #URleap.print_TCP(new_x, new_y, new_z)
+                #Print information to the terminal
                 URleap.print_TCP(new_x, new_y, new_z)
                 jpos = robot.get_actual_joint_positions()
                 URleap.print_joint_pos(jpos)
@@ -83,15 +85,13 @@ class SampleListener(Leap.Listener):
                 URleap.thumb_index_distance(i,t)
                 URleap.space()
 
-                #URleap.calculate_distance(i, t)
-
-
-                # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                #     s.connect((host, port))
-                #     if dg < 113:
-                #         s.sendall(b'SET POS 0\n')
-                #     if dg > 113:
-                #         s.sendall(b'SET POS 255\n')
+                #Control the gripper
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.connect((host, port))
+                    if dg < 113:
+                        s.sendall(b'SET POS 0\n')
+                    if dg > 113:
+                        s.sendall(b'SET POS 255\n')
 
 
 def ExampleurScriptLEAP():
