@@ -1,4 +1,4 @@
-import Leap, sys, URBasic, URBasic.urScript, time, socket, math, URleap
+import Leap, sys, URBasic, URBasic.urScript, time, socket, URleap
 
 #set speed and acceleration of the robot
 acc, vel = 0.7, 2.5
