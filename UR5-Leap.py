@@ -89,9 +89,9 @@ class SampleListener(Leap.Listener):
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     s.connect((host, port))
                     if dg < 113:
-                        s.sendall(b'SET POS 0\n')
+                        s.sendall(b'SET POS 0\n') #Open gripper
                     if dg > 113:
-                        s.sendall(b'SET POS 255\n')
+                        s.sendall(b'SET POS 255\n') #Close gripper
 
 
 def ExampleurScriptLEAP():
