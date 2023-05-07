@@ -24,22 +24,12 @@ def apply_bounds_TCP(new_x, new_y, new_z):
     to move
     '''
 
-    if new_x < -0.6:
-        new_x = -0.6
-    if new_x > -0.23:
-        new_x = -0.23
-        
-    if new_y < -0.43:
-        new_y = -0.43
-    if new_y > 0.43:
-        new_y = 0.43
-        
-    if new_z < 0.2:
-        new_z = 0.2
-    if new_z > 0.5:
-        new_z = 0.5
-    
+    new_x = max(-0.6, min(-0.23, new_x))
+    new_y = max(-0.43, min(0.43, new_y))
+    new_z = max(0.2, min(0.5, new_z))
+
     return new_x, new_y, new_z
+
 
 def apply_bounds_wrist(rx, ry, rz):
 
@@ -47,22 +37,12 @@ def apply_bounds_wrist(rx, ry, rz):
     Set limitations for roll, pitch and yaw positions for the wrist. By defining lower and upper bounds for
     rx-values, ry-values and rz-values, this provides a limitation for rpy-values. 
     '''
-    if rx >3.14:
-        rx =3.14
-    if rx <-3.14:
-        rx =-3.14
-    
-    if ry >1:
-        ry =1
-    if ry <-1:
-        ry =-1
-
-    if rz >1.3:
-        rz =1.3
-    if rz <-1.3:
-        rz =-1.3
+    rx = max(-3.14, min(3.14, rx))
+    ry = max(-1, min(1, ry))
+    rz = max(-1.3, min(1.3, rz))
 
     return rx, ry, rz
+
 
 def gripper_pos(i,t):
 

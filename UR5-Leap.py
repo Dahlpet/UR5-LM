@@ -14,11 +14,11 @@ robot = URBasic.urScriptExt.UrScriptExt(host=host,robotModel=robotModle)
 robot.reset_error()
 
 # Activate the gripper, and set speed and force
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((host, port))
-    s.sendall(b'SET ACT 1\n')
-    s.sendall(b'SET SPE 255\n')
-    s.sendall(b'SET FOR 0\n')
+# with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+#     s.connect((host, port))
+#     s.sendall(b'SET ACT 1\n')
+#     s.sendall(b'SET SPE 255\n')
+#     s.sendall(b'SET FOR 0\n')
 
 
 class SampleListener(Leap.Listener):
@@ -87,12 +87,12 @@ class SampleListener(Leap.Listener):
                 URleap.space()
 
                 #Control the gripper
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    s.connect((host, port))
-                    if dg < 113:
-                        s.sendall(b'SET POS 0\n') #Open gripper
-                    if dg > 113:
-                        s.sendall(b'SET POS 255\n') #Close gripper
+                # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                #     s.connect((host, port))
+                #     if dg < 113:
+                #         s.sendall(b'SET POS 0\n') #Open gripper
+                #     if dg > 113:
+                #         s.sendall(b'SET POS 255\n') #Close gripper
 
 
 def ExampleurScriptLEAP():
