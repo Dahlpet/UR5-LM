@@ -47,27 +47,28 @@ def apply_bounds_wrist(rx, ry, rz):
 def gripper_pos(i,t):
 
     '''
-    Converts the distance between the thumb and index finger, and converts this value to
+    Calculates the distance between the thumb and index finger, and converts this value to
     coresponding value for the position of the gripper.
 
-    Position is limited til open or closed position defined by 
+    Position is limited til open or closed
+
+    i = tip of index finger, t = tip of thumb
     '''
 
-    d = math.sqrt(((i[0]-t[0])**2 + (i[1]-t[1])**2 + (i[2]-t[2])**2))
-    dg = (d - 15) * (0 - 226) / (120 - 15) + 226
-    if dg > 120: d = 120
-    if dg < 15: d = 15
-    return dg, d
+    f_dist = math.sqrt(((i[0]-t[0])**2 + (i[1]-t[1])**2 + (i[2]-t[2])**2))
+    f_conv = (f_dist - 15) * (0 - 226) / (120 - 15) + 226
+    f_conv = max(15, min(120, f_conv))
+    return f_conv, f_dist
 
-def print_gripper_pos(dg):
+def print_gripper_pos(f_conv):
 
     '''
     Prints the status of the gripper, opern/closed
     '''
 
-    if dg > 120:
+    if f_conv > 120:
         print("Gripper status: Closed")
-    if dg < 15:
+    if f_conv < 15:
         print("Gripper status: Open")
 
 

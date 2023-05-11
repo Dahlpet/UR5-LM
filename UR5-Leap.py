@@ -80,9 +80,9 @@ class SampleListener(Leap.Listener):
                 URleap.print_joint_pos(jpos)
                 URleap.print_wrist_RPYs(rx, ry, rz)
                 
-                dg, d = URleap.gripper_pos(t,i)
+                f_conv, f_dist = URleap.gripper_pos(t,i)
                 
-                URleap.print_gripper_pos(dg)
+                URleap.print_gripper_pos(f_conv)
                 URleap.thumb_index_distance(i,t)
                 URleap.space()
 
